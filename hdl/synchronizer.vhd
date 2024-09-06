@@ -9,19 +9,17 @@ port (
 );
 end entity synchronizer;
 
--- synchronizer input
-signal async : std_logic;
--- flip flop connector
-signal mid   : std_logic;
--- synchronizer output
-signal sync  : std_logic;
--- clock signal
-signal clk   : std_logic;
-
-process(clk)
+architecture synchronizer_arch of synchronizer is
+    -- internal signal for flip-flop connection
+    signal mid   : std_logic; 
 begin
-    if rising_edge(clk) then
-        mid <= async;
-        synch <= mid;
-    end if;
-end process;
+
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            mid <= async;
+            sync <= mid;
+        end if;
+    end process;
+
+end architecture synchronizer_arch;
