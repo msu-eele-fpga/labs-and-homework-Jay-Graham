@@ -41,39 +41,44 @@ begin
 
     stimulus: process
     begin
-        rst_tb <= '1';
-        input_tb <= '0';
-        wait for CLK_PERIOD * 2;
-
         rst_tb <= '0';
+        input_tb <= '0';
         wait for CLK_PERIOD * 2;
 
         -- Test Case 1: Single pulse when input transitions from L to H
         input_tb <= '1';
         wait for CLK_PERIOD;
+	input_tb <= '0';
         assert pulse_tb = '1'
             report "Test Case 1 Failed: Pulse was not generated on rising edge"
             severity error;
-        wait for CLK_PERIOD;
-        input_tb <= '0';
         wait for CLK_PERIOD * 2;
 
         -- Test Case 2: No additional pulse when input remains high
         input_tb <= '1';
         wait for CLK_PERIOD;
-        assert pulse_tb = '0'
-            report "Test Case 2 Failed: Pulse was generated when input remained high"
+        assert pulse_tb = '1'
+            report "Test Case 2 Failed: Pulse was not generated on rising edge"
             severity error;
         wait for CLK_PERIOD;
-        input_tb <= '0';
+	assert pulse_tb = '0'
+            report "Test Case 2 Failed: Pulse did not go low after 1 clock cycle"
+            severity error;
+	wait for CLK_PERIOD;	
+	assert pulse_tb = '0'
+            report "Test Case 2 Failed: 2nd pulse was generated on one input high"
+            severity error;
+	input_tb <= '0';
         wait for CLK_PERIOD * 2;
 
-        -- Test Case 3: Reset Behavior
+        --Test Case 3: Reset Behavior
+	input_tb <= '1';
         rst_tb <= '1';
         wait for CLK_PERIOD;
         assert pulse_tb = '0'
             report "Test Case 3 Failed: Pusle was generated during reset"
             severity error;
+	input_tb <= '0';
         rst_tb <= '0';
         wait for CLK_PERIOD;
 
