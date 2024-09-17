@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity debouncer is
     generic (
         clk_period    : time := 20 ns;
-        debounce_time : time := 1 ms
+        debounce_time : time
     );
     port (
         clk           : in  std_ulogic;
@@ -26,7 +26,7 @@ begin
 
     STATE_MEMORY : process(clk, rst)
     begin
-        if rst = '0' then
+        if rst = '1' then
             current_state <= sWait;
             counter <= 0;
         elsif rising_edge(clk) then
