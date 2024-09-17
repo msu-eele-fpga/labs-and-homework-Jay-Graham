@@ -41,7 +41,6 @@ architecture async_conditioner_arch of async_conditioner is
 
     signal sync_signal      : std_ulogic;
     signal debounced_signal : std_ulogic;
-    signal pulse_signal     : std_ulogic;
 
 begin
 
@@ -69,9 +68,7 @@ begin
             clk   => clk,
             rst   => rst,
             input => debounced_signal,
-            pulse => pulse_signal
+            pulse => sync
         );
-
-    sync <= pulse_signal;
 
 end architecture async_conditioner_arch;
