@@ -18,7 +18,7 @@ architecture async_conditioner_tb_arch of async_conditioner_tb is
 
     signal clk_tb    : std_ulogic := '0';
     signal rst_tb    : std_ulogic := '0';
-    signal asynch_tb : std_ulogic := '0';
+    signal async_tb : std_ulogic := '0';
     signal sync_tb   : std_ulogic;
 
     constant CLK_PERIOD : time := 20ns;

@@ -31,4 +31,4 @@ begin
             prev_input <= input;
         end if;
     end process;
-end architecutre one_pulse_arch;
+end architecture one_pulse_arch;
