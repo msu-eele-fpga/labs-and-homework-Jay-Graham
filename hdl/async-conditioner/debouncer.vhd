@@ -34,9 +34,9 @@ begin
             if current_state = sHigh or current_state = sLow then
                 if counter < COUNTER_LIMIT then
                     counter <= counter + 1;
+                else    
+                    counter <= 0;
                 end if;
-            else
-                counter <= 0;
             end if;
         end if;
     end process;
@@ -57,14 +57,10 @@ begin
                     next_state <= sHigh;
                 end if;
             when sLow =>
-                if input = '1' then
-                    if counter = COUNTER_LIMIT then
-                        next_state <= sLow;
-                    else
-                        next_state <= sWait;
-                    end if;
-                else
+                if counter = COUNTER_LIMIT then
                     next_state <= sWait;
+                else
+                    next_state <= sLow;
                 end if;
             when others =>
                 next_state <= sWait;
