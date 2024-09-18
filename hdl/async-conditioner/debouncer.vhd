@@ -18,58 +18,59 @@ end entity debouncer;
 architecture debouncer_arch of debouncer is
 
     type state_type is (sWait, sHigh, sLow);
-    signal current_state, next_state : state_type;
+    signal state : state_type := sWait;
     signal counter : integer := 0;
     constant COUNTER_LIMIT : integer := integer(debounce_time / clk_period);
 
 begin
 
-    STATE_MEMORY : process(clk, rst)
+    DEBOUNCER_LOGIC : process(clk, rst)
     begin
         if rst = '1' then
-            current_state <= sWait;
+            state <= sWait;
             counter <= 0;
         elsif rising_edge(clk) then
-            current_state <= next_state;
-            if current_state = sHigh or current_state = sLow then
-                if counter < COUNTER_LIMIT then
-                    counter <= counter + 1;
-                else    
+            case state is
+                when sWait =>
+                    if input = '1' then
+                        state <= sHigh;
+                    else
+                        state <= sWait;
+                    end if;
+                when sHigh =>
+                    if counter = COUNTER_LIMIT then
+                        if input = '0' then
+                            state <= sLow;
+                            counter <= 0;
+                        else   
+                            state <= sHigh;
+                        end if;
+                    else
+                        state <= sHigh;
+                        counter <= counter + 1;
+                    end if;
+                when sLow =>
+                    if counter = COUNTER_LIMIT then
+                        if input = '1' then
+                            state <= sLow;
+                        else
+                            state <= sWait;
+                            counter <= 0;
+                        end if;
+                    else
+                        state <= sLow;
+                        counter <= counter + 1;
+                    end if;
+                when others =>
+                    state <= sWait;
                     counter <= 0;
-                end if;
-            end if;
+            end case;
         end if;
     end process;
 
-    NEXT_STATE_LOGIC : process(current_state, input)
+    OUTPUT_LOGIC : process(state, input)
     begin
-        case current_state is
-            when sWait =>
-                if input = '1' then
-                    next_state <= sHigh;
-                else
-                    next_state <= sWait;
-                end if;
-            when sHigh =>
-                if counter = COUNTER_LIMIT then
-                    next_state <= sLow;
-                else   
-                    next_state <= sHigh;
-                end if;
-            when sLow =>
-                if counter = COUNTER_LIMIT then
-                    next_state <= sWait;
-                else
-                    next_state <= sLow;
-                end if;
-            when others =>
-                next_state <= sWait;
-        end case;
-    end process;
-
-    OUTPUT_LOGIC : process(current_state, input)
-    begin
-        case current_state is
+        case state is
             when sWait => 
                 debounced <= '0';
             when sHigh =>
