@@ -39,8 +39,8 @@ architecture async_conditioner_arch of async_conditioner is
         );
     end component;
 
-    signal sync_signal      : std_ulogic;
-    signal debounced_signal : std_ulogic;
+    signal sync_signal      : std_ulogic := '0';
+    signal debounced_signal : std_ulogic := '0';
 
 begin
 
