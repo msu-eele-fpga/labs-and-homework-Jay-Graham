@@ -53,8 +53,8 @@ begin
 
     debouncer_inst : debouncer
         generic map (
-            clk_period    => 20ns,
-            debounce_time => 1ms
+            clk_period    => 20 ns,
+            debounce_time => 100 ms
         )
         port map (
             clk       => clk,

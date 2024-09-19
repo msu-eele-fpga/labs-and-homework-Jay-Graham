@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity debouncer is
     generic (
         clk_period    : time := 20 ns;
-        debounce_time : time
+        debounce_time : time := 100 ms
     );
     port (
         clk           : in  std_ulogic;
