@@ -6,6 +6,7 @@ package tb_pkg is
     constant COMBINATIONAL_DELAY : time := 1ns;
 
     procedure wait_for_clock_edge(signal clk: in std_ulogic);
+    procedure wait_for_clock_edges(signal clk: in std_ulogic; constant n_edges: in natural);
 
 end package;
 
